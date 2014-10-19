@@ -1,6 +1,6 @@
 {
   "name": "nuclear-react-mixin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A React mixin to bind component state to a NuclearJS reactor.",
   "main": "src/mixin.js",
   "scripts": {

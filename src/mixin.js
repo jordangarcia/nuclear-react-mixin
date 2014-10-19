@@ -24,7 +24,7 @@
 function getState(reactor, data) {
   var state = {}
   for (var key in data) {
-    state[key] = reactor.getImmutable(data[key])
+    state[key] = reactor.get(data[key])
   }
   return state
 }
