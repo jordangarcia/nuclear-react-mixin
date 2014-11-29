@@ -12,7 +12,11 @@
  *   getDataBindings() {
  *     return {
  *       board: 'game.board',
- *       player: ['game', 'players', this.props.playerId]
+ *       player: ['game', 'players', this.props.playerId],
+ *       // can pass it a getter
+ *       playerCount: Nuclear.Getter('game.players', function(players) {
+ *         return players.size
+ *       })
  *     }
  *   }
  * })
@@ -29,35 +33,38 @@ function getState(reactor, data) {
   return state
 }
 
-/**
- * Gets the values for an object
- */
-function objectValues(obj) {
-  var values = []
-  for (var prop in obj) {
-    values.push(obj[prop])
+function each(obj, fn) {
+  for (var key in obj) {
+    fn(obj[key], key)
   }
-  return values
 }
 
 module.exports = function ReactorMixin(reactor) {
 
   return {
-    getInitialState() {
+    getInitialState: function() {
       return getState(reactor, this.getDataBindings())
     },
 
-    componentDidMount() {
+    componentDidMount: function() {
+      var component = this
       var dataBindings = this.getDataBindings()
-      var deps = objectValues(dataBindings)
-      this.__changeObserver = reactor.createChangeObserver()
-      this.__changeObserver.onChange(deps, () => {
-        this.setState(getState(reactor, dataBindings))
+      component.__unwatchFns = []
+      each(this.getDataBindings(), function(getter, key) {
+        var unwatchFn = reactor.observe(getter, function(val) {
+          component.setState({
+            key: val
+          })
+        })
+
+        component.__unwatchFns.push(unwatchFn)
       })
     },
 
-    componentWillUnmount() {
-      this.__changeObserver.destroy()
+    componentWillUnmount: function() {
+      while (this.__unwatchFns.length) {
+        this.__unwatchFns.shift()()
+      }
     }
   }
 }

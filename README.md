@@ -19,8 +19,12 @@ var PlayerCard = React.createClass({
       playerInfo: ['players', this.props.id],
       // can lookup by array or string
       avatarSize: 'displayOptions.avatarSize'
+      // can pass it a getter
+      playerCount: Nuclear.Getter('game.players', function(players) {
+        return players.size
+      })
     }
-  }
+  },
 
   render: function() {
     var avatarSize = this.state.avatarSize
@@ -50,8 +54,8 @@ It is keeping the React component in sync with the Nuclear Reactor.  It does thi
 // The mixin is actually doing:
 getInitialState: function() {
   return {
-    playerInfo: reactor.getImmutable(['players', this.props.id]),
-    avatarSize: reactor.getImmutable('displayOptions.avatarSize'),
+    playerInfo: reactor.get(['players', this.props.id]),
+    avatarSize: reactor.get('displayOptions.avatarSize'),
   }
 }
 ```
@@ -61,4 +65,5 @@ Also whenever any of the bound data values change on the Nuclear Reactor it will
 since it only has to do `prevState.getIn(keyPath) === nextState.getIn(keyPath)` to check if the
 value has changed (Immutability FTW)
 
-The mixin also provides all the logic to destroy the Reactor ChangeObservers on unmounting so you don't have to!
+The mixin also provides all the logic to destroy unregister all the `reactor.observe` watchers automatically on
+`componentWillUnmount`

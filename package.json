@@ -1,15 +1,21 @@
 {
   "name": "nuclear-react-mixin",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A React mixin to bind component state to a NuclearJS reactor.",
   "main": "src/mixin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/jordangarcia/nuclear-react-mixin"
   },
   "author": "Jordan Garcia",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "nuclear-js": "^0.5.x",
+    "sinon": "^1.12.1",
+    "lodash": "^2.4.1"
+  }
 }
