@@ -52,9 +52,9 @@ module.exports = function ReactorMixin(reactor) {
       component.__unwatchFns = []
       each(this.getDataBindings(), function(getter, key) {
         var unwatchFn = reactor.observe(getter, function(val) {
-          component.setState({
-            key: val
-          })
+          var newState = {};
+          newState[key] = val;
+          component.setState(newState)
         })
 
         component.__unwatchFns.push(unwatchFn)
