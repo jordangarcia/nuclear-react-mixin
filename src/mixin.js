@@ -28,7 +28,7 @@
 function getState(reactor, data) {
   var state = {}
   for (var key in data) {
-    state[key] = reactor.get(data[key])
+    state[key] = reactor.evaluate(data[key])
   }
   return state
 }
